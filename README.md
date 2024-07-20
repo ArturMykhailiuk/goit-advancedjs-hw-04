@@ -1,1 +1,1 @@
-https://github.com/ArturMykhailiuk/goit-advancedjs-hw-01
+https://arturmykhailiuk.github.io/goit-advancedjs-hw-01

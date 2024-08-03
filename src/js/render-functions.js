@@ -1,7 +1,4 @@
-
-
-
-export const createGalleryCardTemplate = (hit) => {
+export const createGalleryCardTemplate = hit => {
   return `
   <li class="gallery-card">
 
@@ -29,7 +26,6 @@ export const createGalleryCardTemplate = (hit) => {
     </div>
   </li>
   `;
-  
 };
 
 export const addProgressBar = () => {
@@ -37,12 +33,10 @@ export const addProgressBar = () => {
   loaderSpan.classList.add('loader');
 
   const targetElement = document.querySelector('.js-search-form');
-  targetElement.insertAdjacentElement('afterend', loaderSpan);;
-}
+  targetElement.insertAdjacentElement('afterend', loaderSpan);
+};
 
 export const removeProgressBar = () => {
   const elementToRemove = document.querySelector('.loader');
   elementToRemove.remove();
-}
-
-
+};

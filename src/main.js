@@ -6,54 +6,52 @@ import { removeProgressBar } from './js/render-functions.js';
 import { createGalleryCardTemplate } from './js/render-functions.js';
 import { fetchPhotos } from './js/pixabay-api.js';
 
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
 
 const onSearchFormSubmit = event => {
-    event.preventDefault();
-  
-    const searchedValue = event.target.elements.user_query.value;
-    
-    event.target.elements.user_query.value = '';
+  event.preventDefault();
 
-    addProgressBar();
-    
-    fetchPhotos(searchedValue)
-      .then(({ hits }) => {
-        if (hits.length === 0) {
-          iziToast.show({
-            title: 'Sorry, there are no images matching your search query. Please try again!',
-            position: 'topRight',
-            color: 'red',
-          });
-  
-          return;
-        }
-        
-        const galleryCardsTemplate = hits
-          .map(imgInfo => createGalleryCardTemplate(imgInfo))
-          .join('');
+  const searchedValue = event.target.elements.user_query.value;
 
-        galleryEl.innerHTML = galleryCardsTemplate;
-  
-        const lightbox = new SimpleLightbox('.gallery-card a', {
-          captionsData: 'alt',  
-          captionDelay: 250,
+  event.target.elements.user_query.value = '';
+
+  addProgressBar();
+
+  fetchPhotos(searchedValue)
+    .then(({ hits }) => {
+      if (hits.length === 0) {
+        iziToast.show({
+          title:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+          color: 'red',
         });
 
-        lightbox.refresh();
-      })
-      .catch(err => {
-        console.log(err);
+        return;
+      }
+
+      const galleryCardsTemplate = hits
+        .map(imgInfo => createGalleryCardTemplate(imgInfo))
+        .join('');
+
+      galleryEl.innerHTML = galleryCardsTemplate;
+
+      const lightbox = new SimpleLightbox('.gallery-card a', {
+        captionsData: 'alt',
+        captionDelay: 250,
       });
 
-      removeProgressBar();
-  };
+      lightbox.refresh();
+    })
+    .catch(err => {
+      console.log(err);
+    });
 
-  searchFormEl.addEventListener('submit', onSearchFormSubmit);
+  removeProgressBar();
+};
 
-
-
+searchFormEl.addEventListener('submit', onSearchFormSubmit);

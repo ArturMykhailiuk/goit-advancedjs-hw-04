@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homework 2</title>
     <link rel="stylesheet" href="./css/common.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   </head>
   <body>
-    <ul class="list">
-      <li>
-        <a href="./1-timer.html">Task1 - Timer</a>
-      </li>
-      <li>
-        <a href="./2-snackbar.html">Task2 - Snackbar</a>
-      </li>
-    </ul>
+
+    <section class="hero">
+      <div class="container">
+        <form class="search-form js-search-form">
+          <input class="search-input js-search-input" type="text" name="user_query" required placeholder="Search images..."/>
+          <button class="search-btn" type="submit">Search</button>
+        </form>       
+        <ul class="gallery js-gallery"></ul>
+      </div>
+    </section>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

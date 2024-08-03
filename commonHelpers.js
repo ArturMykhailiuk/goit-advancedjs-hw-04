@@ -1,2 +1,28 @@
-import"./assets/modulepreload-polyfill-3cfb730f.js";import{f as m,i as h}from"./assets/vendor-77e16229.js";let o;document.querySelector('[data-start=""]').disabled=!0;const y={enableTime:!0,time_24hr:!0,defaultDate:new Date,minuteIncrement:1,onClose(e){o=e[0],console.log(e[0]),p(e[0])}},f=m("#datetime-picker",y);function p(e){const t=new Date;new Date(e)<t?(h.error({title:"Error",position:"topRight",message:"Please choose a date in the future"}),document.querySelector('[data-start=""]').disabled=!0):document.querySelector('[data-start=""]').disabled=!1}function n(e){return String(e).padStart(2,"0")}function S(e){const i=Math.floor(e/864e5),c=Math.floor(e%864e5/36e5),u=Math.floor(e%864e5%36e5/6e4),l=Math.floor(e%864e5%36e5%6e4/1e3);return{days:n(i),hours:n(c),minutes:n(u),seconds:n(l)}}const d={deadline:o,elements:{days:document.querySelector('[data-days=""]'),hours:document.querySelector('[data-hours=""]'),minutes:document.querySelector('[data-minutes=""]'),seconds:document.querySelector('[data-seconds=""]')},intervalId:null,start(){this.intervalId=setInterval(()=>{const e=this.deadline-Date.now();if(e<=0){clearInterval(this.intervalId),this.stop();return}const{days:t,hours:r,minutes:s,seconds:a}=S(e);this.elements.days.textContent=t,this.elements.hours.textContent=r,this.elements.minutes.textContent=s,this.elements.seconds.textContent=a},1e3),document.querySelector('[data-start=""]').disabled=!0,document.querySelector("#datetime-picker").disabled=!0},stop(){clearInterval(this.intervalId),document.querySelector("#datetime-picker").disabled=!1}};document.querySelector('[data-start=""]').addEventListener("click",()=>{o&&(d.deadline=new Date(o),d.start())});document.querySelector("#datetime-picker").addEventListener("click",()=>{f.open()});
+import{i as n,S as i}from"./assets/vendor-8c59ed88.js";(function(){const o=document.createElement("link").relList;if(o&&o.supports&&o.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))s(r);new MutationObserver(r=>{for(const t of r)if(t.type==="childList")for(const l of t.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&s(l)}).observe(document,{childList:!0,subtree:!0});function a(r){const t={};return r.integrity&&(t.integrity=r.integrity),r.referrerPolicy&&(t.referrerPolicy=r.referrerPolicy),r.crossOrigin==="use-credentials"?t.credentials="include":r.crossOrigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function s(r){if(r.ep)return;r.ep=!0;const t=a(r);fetch(r.href,t)}})();const c=e=>`
+  <li class="gallery-card">
+
+  <a class="gallery-link" href="${e.largeImageURL}">
+    <img class="gallery-img" src="${e.webformatURL}" alt="${e.tags}" />
+  </a>
+
+    <div class="gallery-card-info">
+      <div class="image-info">
+        <p class="image-info-label">Likes:</p>
+        <p class="image-info-counter">${e.likes}</p>
+      </div>
+      <div class="image-info">
+        <p class="image-info-label">Comments:</p>
+        <p class="image-info-counter">${e.comments}</p>
+      </div>
+      <div class="image-info">  
+        <p class="image-info-label">Views:</p>
+        <p class="image-info-counter">${e.views}</p>
+      </div>
+      <div class="image-info">
+        <p class="image-info-label">Dowloads:</p>
+        <p class="image-info-counter">${e.downloads}</p>
+      </div>
+    </div>
+  </li>
+  `,m=()=>{const e=document.createElement("div");e.classList.add("loader"),document.querySelector(".js-search-form").insertAdjacentElement("afterend",e)},d=()=>{document.querySelector(".loader").remove()},u=e=>fetch(`https://pixabay.com/api/?key=45247125-03c336e2130b29d2672f4e8a7&q=${e}&image_type=photo&orientation=horizontal&safesearch=true`).then(o=>{if(!o.ok)throw new Error(o.status);return o.json()}),f=document.querySelector(".js-search-form"),g=document.querySelector(".js-gallery"),p=e=>{e.preventDefault();const o=e.target.elements.user_query.value;e.target.elements.user_query.value="",m(),u(o).then(({hits:a})=>{if(a.length===0){n.show({title:"Sorry, there are no images matching your search query. Please try again!",position:"topRight",color:"red"});return}const s=a.map(t=>c(t)).join("");g.innerHTML=s,new i(".gallery-card a",{captionsData:"alt",captionDelay:250}).refresh()}).catch(a=>{console.log(a)}),d()};f.addEventListener("submit",p);
 //# sourceMappingURL=commonHelpers.js.map

@@ -16,10 +16,13 @@ const onSearchFormSubmit = event => {
   event.preventDefault();
 
   const searchedValue = event.target.elements.user_query.value.trim();
+  
 
   event.target.elements.user_query.value = '';
 
   addProgressBar();
+
+
 
   if (searchedValue.length !== 0) {
     fetchPhotos(searchedValue)
@@ -57,6 +60,8 @@ const onSearchFormSubmit = event => {
       .catch(err => {
         console.log(err);
       });
+  }else{
+    removeProgressBar();
   }
 };
 

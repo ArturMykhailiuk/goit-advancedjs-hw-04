@@ -28,11 +28,11 @@ export const createGalleryCardTemplate = hit => {
   `;
 };
 
-export const addProgressBar = () => {
+export const addProgressBar = (selector) => {
   const loaderSpan = document.createElement('div');
   loaderSpan.classList.add('loader');
 
-  const targetElement = document.querySelector('.js-search-form');
+  const targetElement = document.querySelector(selector);
   targetElement.insertAdjacentElement('afterend', loaderSpan);
 };
 

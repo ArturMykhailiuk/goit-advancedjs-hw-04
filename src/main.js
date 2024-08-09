@@ -11,58 +11,114 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const searchFormEl = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
+const loadMoreBtnEl = document.querySelector('.js-load-more');
 
-const onSearchFormSubmit = event => {
-  event.preventDefault();
+let currentPage = 1;
+let totalHits = 0;
+let searchedValue = '';
 
-  const searchedValue = event.target.elements.user_query.value.trim();
-  
+const onSearchFormSubmit = async event => {
+  try {
+    event.preventDefault();
 
-  event.target.elements.user_query.value = '';
+    searchedValue = event.target.elements.user_query.value.trim();
 
-  addProgressBar();
+    currentPage = 1;
 
+    event.target.elements.user_query.value = '';
 
+    addProgressBar('.js-search-form');
 
-  if (searchedValue.length !== 0) {
-    fetchPhotos(searchedValue)
-      .then(({ hits }) => {
-        if (hits.length === 0) {
-          galleryEl.innerHTML = '';
+    if (searchedValue.length !== 0) {
+      const { data } = await fetchPhotos(searchedValue, currentPage);
 
-          removeProgressBar();
-
-          iziToast.show({
-            title:
-              'Sorry, there are no images matching your search query. Please try again!',
-            position: 'topRight',
-            color: 'red',
-          });
-
-          return;
-        }
-
-        const galleryCardsTemplate = hits
-          .map(imgInfo => createGalleryCardTemplate(imgInfo))
-          .join('');
-
-        galleryEl.innerHTML = galleryCardsTemplate;
+      if (data.hits.length === 0) {
+        galleryEl.innerHTML = '';
 
         removeProgressBar();
 
-        const lightbox = new SimpleLightbox('.gallery-card a', {
-          captionsData: 'alt',
-          captionDelay: 250,
+        iziToast.show({
+          title:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+          color: 'red',
         });
 
-        lightbox.refresh();
-      })
-      .catch(err => {
-        console.log(err);
+        return;
+      }
+
+      totalHits = data.hits.length;
+
+      const galleryCardsTemplate = data.hits
+        .map(imgInfo => createGalleryCardTemplate(imgInfo))
+        .join('');
+
+      galleryEl.innerHTML = galleryCardsTemplate;
+
+      loadMoreBtnEl.classList.remove('is-hidden');
+
+      removeProgressBar();
+
+      const lightbox = new SimpleLightbox('.gallery-card a', {
+        captionsData: 'alt',
+        captionDelay: 250,
       });
-  }else{
+
+      lightbox.refresh();
+    } else {
+      removeProgressBar();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const onLoadMoreBtnClick = async event => {
+  try {
+    currentPage++;
+
+    addProgressBar('.js-gallery');
+
+    const { data } = await fetchPhotos(searchedValue, currentPage);
+
+    totalHits += data.hits.length;
+
+    const galleryCardsTemplate = data.hits
+      .map(imgInfo => createGalleryCardTemplate(imgInfo))
+      .join('');
+
+    galleryEl.insertAdjacentHTML('beforeend', galleryCardsTemplate);
+
+    let elem = document.querySelector('.gallery-card ');
+    let rect = elem.getBoundingClientRect();
+    console.log(rect.height);
+    window.scrollBy({
+      top: 2 * rect.height,
+      behavior: 'smooth',
+    });
+
+    const lightbox = new SimpleLightbox('.gallery-card a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+    });
+
+    lightbox.refresh();
+
     removeProgressBar();
+
+    if (totalHits >= data.totalHits) {
+      loadMoreBtnEl.classList.add('is-hidden');
+
+      iziToast.show({
+        title: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+        color: 'grey',
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
+loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);

@@ -14,5 +14,5 @@ export const fetchPhotos = (query, page) => {
       per_page: 15,
     },
   };
-  return axios.get(``, axiosConfigs);
+  return axios.get(`/`, axiosConfigs);
 };

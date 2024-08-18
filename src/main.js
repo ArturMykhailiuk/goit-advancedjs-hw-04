@@ -89,7 +89,7 @@ const onLoadMoreBtnClick = async event => {
 
     galleryEl.insertAdjacentHTML('beforeend', galleryCardsTemplate);
 
-    let elem = document.querySelector('.gallery-card ');
+    let elem = document.querySelector('.gallery-card');
     let rect = elem.getBoundingClientRect();
     console.log(rect.height);
     window.scrollBy({
